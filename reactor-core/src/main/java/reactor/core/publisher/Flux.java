@@ -5259,6 +5259,8 @@ public abstract class Flux<T> implements Publisher<T> {
 	 * Keep information about the order in which source values were received by
 	 * indexing them with a 0-based incrementing long, returning a {@link Flux}
 	 * of {@link Tuple2 Tuple2<(index, value)>}.
+	 * <p>
+	 * <img class="marble" src="doc-files/marbles/index.svg" alt="">
 	 *
 	 * @return an indexed {@link Flux} with each source value combined with its 0-based index.
 	 */
@@ -5276,6 +5278,8 @@ public abstract class Flux<T> implements Publisher<T> {
 	 * 1-based instead of 0-based:
 	 * <p>
 	 * {@code index((i, v) -> Tuples.of(i+1, v))}
+	 * <p>
+	 * <img class="marble" src="doc-files/marbles/indexWithMapper.svg" alt="">
 	 *
 	 * @param indexMapper the {@link BiFunction} to use to combine elements and their index.
 	 * @return an indexed {@link Flux} with each source value combined with its computed index.
