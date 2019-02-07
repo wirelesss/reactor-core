@@ -7944,6 +7944,8 @@ public abstract class Flux<T> implements Publisher<T> {
 	 *  })
 	 * }
 	 * </pre></blockquote>
+	 * <p>
+	 * <img class="marble" src="doc-files/marbles/switchOnFirst.svg" alt="">
 	 *
 	 *
 	 * @param transformer A {@link BiFunction} executed once the first signal is
