@@ -7921,34 +7921,34 @@ public abstract class Flux<T> implements Publisher<T> {
 	/**
 	 * Transform the current {@link Flux<T>} once it emits its first element, making a
 	 * conditional transformation possible. This operator first requests one element
-	 * from the source then applies a transformation derived from a {@link Signal}.
-	 *
+	 * from the source then applies a transformation derived from the first {@link Signal}
+	 * and the source. The whole source (including the first signal) is passed as second
+	 * argument to the {@link BiFunction} and should generally be built upon with operators.
+	 * <p>
 	 * Note that the source might complete or error immediately instead of emitting,
 	 * in which case the {@link Signal} would be onComplete or onError. It is NOT
 	 * necessarily an onNext Signal, and must be checked accordingly.
-     *
-	 * For example, this operator could be used to define a form of routing, depending on
-	 * the first element (which could contain routing metadata for instance):
+     * <p>
+	 * For example, this operator could be used to define a dynamic transformation that depends
+	 * on the first element (which could contain routing metadata for instance):
 	 *
 	 * <blockquote><pre>
 	 * {@code
-	 *  flux.switchOnFirst((signal, flux) -> {
+	 *  fluxOfIntegers.switchOnFirst((signal, flux) -> {
 	 *      if (signal.hasValue()) {
-	 *          if (signal.get() ...) {
-	 *              return flux.map(...).filter(...).flatMap(...).transform(...)
-	 *          } else if (signal.get() ...) {
-	 *              ...
-	 *          }
+	 *          int skipCount = signal.get();
+	 *          return flux.skip(skipCount + 1) //accommodate for metadata signal
 	 *      }
-	 *
-	 *      return Flux.empty();
+	 *      return flux; //either early complete or error, this forwards the termination in any case
+	 *      //`return Flux.empty();` instead would suppress an early error
 	 *  })
 	 * }
 	 * </pre></blockquote>
 	 *
 	 *
 	 * @param transformer A {@link BiFunction} executed once the first signal is
-	 * available and used to transform it conditionally.
+	 * available and used to transform the source conditionally. The whole source (including
+	 * first signal) is passed as second argument to the BiFunction.
 	 * @param <V> the item type in the returned {@link Flux}
      *
 	 * @return a new {@link Flux} that transform the upstream once a signal is available
